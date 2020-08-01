@@ -1,0 +1,30 @@
+filebeat.config:
+ moduls:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+  
+filebeat.autodiscover:
+ providers:
+  - type: docker
+    hints.enabled: true
+    
+autodiscover.providers:
+  - type: docker
+    templates:
+      - condition.contains:
+          docker.container.image: nginx
+        config:
+          - type: log
+            paths:
+              - "/mnt/logs/${data.docker.container.id}/*.log"    
+processors:
+- add_cloud_metadata: ~   
+
+output.elasticsearch:
+   hosts: ["http://172.17.0.1:9200/"]
+   username: "elastic"
+   password: "changeme"
+setup.kibana:
+  host: "http://172.17.0.1:5601"
+  username: "elastic"
+  password: "changeme"
