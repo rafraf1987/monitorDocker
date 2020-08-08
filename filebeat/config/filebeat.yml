@@ -7,16 +7,7 @@ filebeat.autodiscover:
  providers:
   - type: docker
     hints.enabled: true
-    
-autodiscover.providers:
-  - type: docker
-    templates:
-      - condition.contains:
-          docker.container.image: nginx
-        config:
-          - type: log
-            paths:
-              - "/mnt/logs/${data.docker.container.id}/*.log"    
+      
 processors:
 - add_cloud_metadata: ~   
 
